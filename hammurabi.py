@@ -46,7 +46,8 @@ class City:
             acres_sold = int(input("How many bushels do you wish to feed your people?"))
         
         self.bushels_in_store -= bushels_fed
-        self.population = int(bushels_fed / 20)
+        self.starved_people = self.population - int(bushels_fed / 20)
+        self.population -= self.starved_people
 
     def acres_to_plant(self):
         acres_planted = int(input("How many acres do you wish to plant with seed?"))
