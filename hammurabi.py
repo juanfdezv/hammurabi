@@ -1,4 +1,6 @@
 import shutil
+import random
+
 
 class City:
     def __init__(self):
@@ -8,8 +10,9 @@ class City:
         self.bushels_per_acre = 3
         self.rat_food = 200
         self.bushels_in_store = 2800
-        self.land_price = 26
+        self.land_price = random.randint(15, 26)
         self.player_bought_acres = False
+        self.immigrants = 0
     
     def acres_to_buy(self):
         acres_bought = int(input("How many acres do you wish to buy?"))
@@ -43,11 +46,19 @@ class City:
 
         while bushels_fed > self.bushels_in_store:
             print("Think again")
-            acres_sold = int(input("How many bushels do you wish to feed your people?"))
+            bushels_fed = int(input("How many bushels do you wish to feed your people?"))
         
         self.bushels_in_store -= bushels_fed
-        self.starved_people = self.population - int(bushels_fed / 20)
-        self.population -= self.starved_people
+
+        people_fed = int(bushels_fed / 20)
+        if self.population > people_fed:
+            self.starved_people = self.population - people_fed
+            self.population -= self.starved_people
+        else:
+            self.starved_people = 0
+            self.immigrants = people_fed - self.population
+            self.population += self.immigrants
+
 
     def acres_to_plant(self):
         acres_planted = int(input("How many acres do you wish to plant with seed?"))
@@ -55,6 +66,9 @@ class City:
             print("Think again")
             acres_planted = int(input("How many acres do you wish to plant with seed?"))
         self.bushels_in_store += acres_planted * self.bushels_per_acre
+
+    def generate_land_price(self):
+        self.land_price = random.randint(15, 26)
 
 
 
@@ -64,6 +78,11 @@ def hammurabi():
     for year in range(1, 3):
         print("\nHamurabi: I beg to report to you,")
         print("In year", year, ",", city.starved_people, "people starved")
+        if year > 1:
+            if city.immigrants > 0:
+                print(city.immigrants, "came to city")
+            else:
+                print("No immigrants came to the city")
         print("Population is now", city.population)
         print("The city now owns", city.acres, "acres")
         print("You harvested", city.bushels_per_acre, "bushels per acre")
@@ -78,6 +97,7 @@ def hammurabi():
         if(city.starved_people > city.population * 0.5):
             end_game(city.starved_people)
             break
+        city.generate_land_price()
 
 
 def print_introduction():
@@ -85,8 +105,8 @@ def print_introduction():
     for line in lines:
         print(line.center(shutil.get_terminal_size().columns))
 
-def end_game(starved):
-    print("\nYou starved", starved, "people in one year!!!")
+def end_game(starved_people):
+    print("\nYou starved", starved_people, "people in one year!!!")
     print("Due to this extreme mismanagement you have not only been impeached and thrown out of office \nbut you have also been declared national fink!!!")
     print("So long for now.")
     
