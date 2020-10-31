@@ -75,6 +75,9 @@ def hammurabi():
             city.acres_to_sell()
         city.bushels_to_feed()
         city.acres_to_plant()
+        if(city.starved_people > city.population * 0.5):
+            end_game(city.starved_people)
+            break
 
 
 def print_introduction():
@@ -82,6 +85,10 @@ def print_introduction():
     for line in lines:
         print(line.center(shutil.get_terminal_size().columns))
 
+def end_game(starved):
+    print("\nYou starved", starved, "people in one year!!!")
+    print("Due to this extreme mismanagement you have not only been impeached and thrown out of office \nbut you have also been declared national fink!!!")
+    print("So long for now.")
     
 
 hammurabi()
