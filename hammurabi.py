@@ -37,13 +37,23 @@ class City:
         
         self.acres -= acres_sold
         self.bushels_in_store += acres_sold * self.land_price
+
+    def bushels_to_feed(self):
+        bushels_fed = int(input("How many bushels do you wish to feed your people?"))
+
+        while bushels_fed > self.bushels_in_store:
+            print("Think again")
+            acres_sold = int(input("How many bushels do you wish to feed your people?"))
+        
+        self.bushels_in_store -= bushels_fed
+        self.population = int(bushels_fed / 20)
         
 
 
 def hammurabi():
     city = City()
     print_introduction()
-    for year in range(1, 11):
+    for year in range(1, 3):
         print("\nHamurabi: I beg to report to you,")
         print("In year", year, ",", city.starved_people, "people starved")
         print("Population is now", city.population)
@@ -55,7 +65,7 @@ def hammurabi():
         city.acres_to_buy()
         if city.player_bought_acres == False:
             city.acres_to_sell()
-        
+        city.bushels_to_feed()
 
 
 def print_introduction():
