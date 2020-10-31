@@ -47,7 +47,14 @@ class City:
         
         self.bushels_in_store -= bushels_fed
         self.population = int(bushels_fed / 20)
-        
+
+    def acres_to_plant(self):
+        acres_planted = int(input("How many acres do you wish to plant with seed?"))
+        while acres_planted > self.acres:
+            print("Think again")
+            acres_planted = int(input("How many acres do you wish to plant with seed?"))
+        self.bushels_in_store += acres_planted * self.bushels_per_acre
+
 
 
 def hammurabi():
@@ -66,6 +73,7 @@ def hammurabi():
         if city.player_bought_acres == False:
             city.acres_to_sell()
         city.bushels_to_feed()
+        city.acres_to_plant()
 
 
 def print_introduction():
