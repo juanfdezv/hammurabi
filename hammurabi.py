@@ -5,6 +5,7 @@ import random
 class City:
     def __init__(self):
         self.starved_people = 0
+        self.starved_people_acc = 0
         self.population = 100
         self.acres = 1000
         self.bushels_per_acre = 3
@@ -58,6 +59,8 @@ class City:
             self.starved_people = 0
             self.immigrants = people_fed - self.population
             self.population += self.immigrants
+            
+        self.starved_people_acc += self.starved_people
 
 
     def acres_to_plant(self):
@@ -70,11 +73,6 @@ class City:
     def generate_land_price(self):
         self.land_price = random.randint(15, 26)
 
-    # generar un numero entre 0 y 10
-    # si ese numero es mayor o igual a 6, no pasa nada
-    # si es menor a 6, generar un numero entre 10 y 40
-    # restar el porcentaje de bushels_in_store => self.bushels_in_store = numero * self.bushels_in_store / 100
-
     def generate_rat_food(self):
         random_number = random.randint(0, 10)
         if (random_number < 6):
@@ -85,25 +83,34 @@ class City:
     def consume_rat_food(self):
         self.bushels_in_store -= self.rat_food
 
+    def print_endgame_stats(self):
+        print("\nHamurabi, you ended your mandate with the following stats:")
+        print("Population:", self.population)
+        print("Bushels:", self.bushels_in_store)
+        print("Starved people:", self.starved_people_acc)
+
+    def print_year_summary(self, year):
+        print("\nHamurabi: I beg to report to you,")
+        print("In year", year, ",", self.starved_people, "people starved")
+        if year > 1:
+            if self.immigrants > 0:
+                print(self.immigrants, "came to city")
+            else:
+                print("No immigrants came to the city")
+        print("Population is now", self.population)
+        print("The city now owns", self.acres, "acres")
+        print("You harvested", self.bushels_per_acre, "bushels per acre")
+        print("Rats ate", self.rat_food, "bushels")
+        print("You now have", self.bushels_in_store, "bushels in store")
+        print("\nLand is trading at", self.land_price, "bushels per acre")
+
 
 
 def hammurabi():
     city = City()
     print_introduction()
-    for year in range(1, 3):
-        print("\nHamurabi: I beg to report to you,")
-        print("In year", year, ",", city.starved_people, "people starved")
-        if year > 1:
-            if city.immigrants > 0:
-                print(city.immigrants, "came to city")
-            else:
-                print("No immigrants came to the city")
-        print("Population is now", city.population)
-        print("The city now owns", city.acres, "acres")
-        print("You harvested", city.bushels_per_acre, "bushels per acre")
-        print("Rats ate", city.rat_food, "bushels")
-        print("You now have", city.bushels_in_store, "bushels in store")
-        print("\nLand is trading at", city.land_price, "bushels per acre")
+    for year in range(1, 4):
+        city.print_year_summary(year)
         city.acres_to_buy()
         if city.player_bought_acres == False:
             city.acres_to_sell()
@@ -115,6 +122,8 @@ def hammurabi():
         city.generate_land_price()
         city.generate_rat_food()
         city.consume_rat_food()
+        print("\n------------------------------------------------------------------------------")
+    city.print_endgame_stats()
 
 
 def print_introduction():
