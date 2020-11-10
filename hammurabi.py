@@ -8,7 +8,7 @@ class City:
         self.population = 100
         self.acres = 1000
         self.bushels_per_acre = 3
-        self.rat_food = 200
+        self.rat_food = 0
         self.bushels_in_store = 2800
         self.land_price = random.randint(15, 26)
         self.player_bought_acres = False
@@ -70,6 +70,21 @@ class City:
     def generate_land_price(self):
         self.land_price = random.randint(15, 26)
 
+    # generar un numero entre 0 y 10
+    # si ese numero es mayor o igual a 6, no pasa nada
+    # si es menor a 6, generar un numero entre 10 y 40
+    # restar el porcentaje de bushels_in_store => self.bushels_in_store = numero * self.bushels_in_store / 100
+
+    def generate_rat_food(self):
+        random_number = random.randint(0, 10)
+        if (random_number < 6):
+            self.rat_food = int(random.randint(10, 40) * self.bushels_in_store / 100)
+        else:
+            self.rat_food = 0
+    
+    def consume_rat_food(self):
+        self.bushels_in_store -= self.rat_food
+
 
 
 def hammurabi():
@@ -98,6 +113,8 @@ def hammurabi():
             end_game(city.starved_people)
             break
         city.generate_land_price()
+        city.generate_rat_food()
+        city.consume_rat_food()
 
 
 def print_introduction():
